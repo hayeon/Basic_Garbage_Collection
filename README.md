@@ -1,5 +1,7 @@
 ## Garbage Collection
 
+![제목을-입력해주세요_-001](https://github.com/hayeon/Coin_Tracker/assets/81798537/8e446d4c-ebce-4243-a35e-5e187b8adb7e)
+
 1. [가비지 콜렉션(Garbage Collection)의 개념](#가비지-콜렉션garbage-collection의-개념)
 
 2. [가비지 콜렉션(Garbage Collection)의 종류](#가비지-콜렉션garbage-collection의-종류)
@@ -8,6 +10,10 @@
 3. [파이썬에서의 GC](#파이썬에서의-gc)
 
 4. [예제코드](#예제코드)
+
+<br/>
+<br/>
+<br/>
 
 ## 가비지 콜렉션(Garbage Collection)의 개념
 
@@ -26,9 +32,10 @@
 # 가비지 콜렉션(Garbage Collection)의 종류
 ## 1. Tracing Garbage Collection(추적 기반 쓰레기 수집)
 
-> 프로그램 시, 특정 타이밍에 할당된 모든 메모리를 조사하여 현재 접근 가능한지 불가능한지 분류한 뒤, 접근 불가능한 메모리를 Garbage로 간주하여 해제시키는 방식이다. 
+> 프로그램 시, 특정 타이밍에 할당된 모든 메모리를 조사하여 현재 접근 가능한지 불가능한지 분류한 뒤, 접근 불가능한 메모리를 Garbage로 간주하여 해제시키는 방식입니다. 
 
  (1)  mark-and-sweep(표시하고 쓸기 기법) <P>
+ ![sweep](https://github.com/hayeon/Coin_Tracker/assets/81798537/331ffb56-b01f-4438-9cd3-c6e2bf7c0408)
 - 가장 단순한 방식으로 프로그램 실행 중 적당한 타이밍에 GC를 실행시켜 접근 가능한 메모리에 마킹(mark)을 한 후, 마킹이 안 된 메모리는 전부 할당 해제(sweep)하는 방식입니다.<p>
 - 부가적인 작업 없이 접근 가능/불가능을 완벽하게 분류& 해제하는 것이 가능하지만, 
 중간에 메모리가 변경되면 마킹을 다시 해야하기 때문에
@@ -40,7 +47,7 @@
  - Tracing Garbage Collection에 비해 수집과 해제라는 한 사이클에 걸리는 시간은 더 오래 걸리지만, GC를 수행할 때 프로그램 정지 시간을 줄일 수 있습니다.
 
 ### * tri-color marking(삼색기법) <P>
-
+![tri-color](https://github.com/hayeon/Coin_Tracker/assets/81798537/458b5d9c-4368-4ebf-87ad-f660fd37111d)
 1. 더 이상 접근 불가능한 메모리를 흰색으로 마킹 <p>
 2. 접근 가능하지만, 해당 메모리에서 참조하는 메모리의 마킹을 하지 않은 경우 회색<p>
 3. 접근 가능하며 해당 메모리가 참조하는 메모리의 마킹도 끝났으면 검은색<p>
@@ -50,7 +57,7 @@
 7. 회색으로 마킹된 메모리가 존재하지 않으면 모두 흰색이나 검은색일 것이고, 접근 가능 여부가 결정됩니다.<P>
 <br/>
 
-<em> 이런 식으로 하면 임의로 GC를 중단하여도, 다음번에 회색인 메모리부터 다시 조사하여 여러번에 걸쳐서 GC를 수행할 수 있습니다. 
+<em>임의로 GC를 중단하여도, 다음번에 회색인 메모리부터 다시 조사하여 여러 번에 걸쳐서 GC를 수행할 수 있습니다. 
  <P> 또한 메모리가 고갈되었을 때 쓰레기 수집을 실행하는 것이 아니라 주기적으로 수집하는 것도 가능합니다. </em>
 <br/>
 <br/>
@@ -173,8 +180,12 @@ if __name__ == '__main__':
     main()
 
 ```
+ 
+### 실행결과 
+ ![memoryleak](https://github.com/hayeon/Coin_Tracker/assets/81798537/ac660767-1c75-4a0d-aa63-aeecafe2059b)
 
-> 여전히 사이클을 통해 연결 리스트에 대한 참조가 남아있으므로 메모리 누수가 발생합니다. <p> GC 모듈은 순환참조로 인한 메모리 누수를 해결할 수 없습니다. 따라서 프로그래머는 참조 사이클을 발생시키지 않도록 주의해야합니다. 
+ 
+>순환 사이클로 인해 연결 리스트에 대한 참조가 남아있으므로 메모리 누수가 발생합니다. <p> GC 모듈은 순환참조로 인한 메모리 누수를 해결할 수 없습니다. 따라서 프로그래머는 참조 사이클을 발생시키지 않도록 주의해야합니다. 
 
 <br/>
 <br/>
@@ -218,6 +229,10 @@ if __name__ == '__main__':
 
 
 ```
+ ### 실행결과 
+ <img width="495" alt="image" src="https://github.com/hayeon/Coin_Tracker/assets/81798537/cb08cb20-79c1-4b58-afb5-9500861ea396">
+ 
+ <br/>
 
 >create_linked_list() 함수의 마지막에서 마지막 노드의 next 참조를 None으로 설정하여 사이클을 방지합니다. <p> 이를 통해 모든 노드가 GC의 대상이 되어 메모리 누수가 발생하지 않습니다. <P>
 수정된 코드를 실행하면 1부터 99까지의 숫자가 한 번씩 출력되며, 메모리 누수가 발생하지 않고 메모리가 정리되는 것을 확인할 수 있습니다.
@@ -229,5 +244,5 @@ if __name__ == '__main__':
 
 ---
 참고자료<p>
-[Tracing garbage collection](#https://en.wikipedia.org/wiki/Tracing_garbage_collection)<p>
-[Garbage Collector interface](#https://docs.python.org/ko/3.7/library/gc.html)
+[Tracing garbage collection](https://en.wikipedia.org/wiki/Tracing_garbage_collection)<p>
+[Garbage Collector interface](https://docs.python.org/ko/3.7/library/gc.html)
